@@ -1,0 +1,4 @@
+[submodule "conabio_ml_text"]
+	path = conabio_ml_text
+	url = https://bitbucket.org/conabio_cmd/conabio_ml_text
+    branch = dev

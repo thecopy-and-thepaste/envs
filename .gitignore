@@ -1,0 +1,30 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+#VirtualEnv
+env/*
+
+# IDE - VSCode
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+#submodule
+conabio_ml
+
+# aux
+*.csv
+*.rdf
+*.ris
+*.pyc
+
+# Result folders
+dataset
+pipelines
+results
+.ipynb_checkpoints
