@@ -161,7 +161,7 @@ def run(config_file: str):
                                  'loss': tf.keras.losses.BinaryCrossentropy(),
                                  "batch_size": batch_size,
                                  "epochs": epochs,
-                                 "metrics": [hl, multilabel_topk(multilabel_k_classes), 'accuracy']
+                                 "metrics": [hl, 'accuracy']
                              }}
                      })\
         .add_process(name="predict_classifier",
@@ -172,7 +172,6 @@ def run(config_file: str):
                      args={
                          "execution_config": None,
                          "prediction_config": {
-                             #  "pred_converter_fn": multilabel_converter(multilabel_th),
                              "sparse_predictions": True
                          }
                      })

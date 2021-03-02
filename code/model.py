@@ -8,9 +8,12 @@ import unidecode
 import tensorflow as tf
 from tensorflow.python.keras.metrics import MeanMetricWrapper
 import numpy as np
+import pandas as pd
 
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Dense, LSTM, Input, Embedding, Bidirectional, GlobalMaxPooling1D, Dropout, LayerNormalization
+
+from conabio_ml_text.datasets.dataset import PredictionDataset
 
 # Remember to update the PYTHON_PATH to
 # export PYTHONPATH=`pwd`:`pwd`/conabio_ml_text/conabio_ml:`pwd`/conabio_ml_text
@@ -120,6 +123,21 @@ class HammingLoss(MeanMetricWrapper):
         super(HammingLoss, self).__init__(
             hamming_loss, name, dtype=dtype, threshold=threshold)
 
+def pre_eval_converter(th: float):
+    threshold = th
+
+    def converter(dataset_pred: PredictionDataset,
+                  eval_opts: dict) -> pd.DataFrame:
+        df = dataset_pred.data[["item", "label", "score"]]
+        df = df[df.apply(lambda x: x["score"] > threshold, axis=1)]
+
+        # Here we have to return the converted labels based in {1, 0}
+        # only columns ["item", "label"] are important.
+        # df[["item", "label"]]
+        return df
+
+    return converter
+
 # endregion
 
 # region custom loss function
@@ -138,8 +156,7 @@ def macro_soft_f1(y, y_hat):
     return macro_cost
 # endregion
 
-
-# model
+# region model
 class EnvironmentClassifier(TFKerasRawDataModel):
 
     @classmethod
